@@ -1,5 +1,4 @@
 <?php
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -8,8 +7,8 @@ class GetData extends Module
 {
     public function __construct()
     {
-        $this->name = 'Data Retriever';
-        $this->tab = 'BACK_office_features';
+        $this->name = 'getdata';
+        $this->tab = 'front_office_features';
         $this->version = '1.0.0';
         $this->author = 'Sobrus';
         $this->need_instance = 0;
@@ -21,7 +20,7 @@ class GetData extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('Get Data');
+        $this->displayName = $this->l('Get data');
         $this->description = $this->l('Description of my module.');
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
