@@ -3,7 +3,7 @@
     <name>getdata</name>
     <displayName><![CDATA[Get data]]></displayName>
     <version><![CDATA[1.0.0]]></version>
-    <description><![CDATA[Description of my module.]]></description>
+    <description><![CDATA[prestashop module for data retreiving ]]></description>
     <author><![CDATA[Sobrus]]></author>
     <tab><![CDATA[front_office_features]]></tab>
 	<confirmUninstall><![CDATA[Are you sure you want to uninstall?]]></confirmUninstall>
