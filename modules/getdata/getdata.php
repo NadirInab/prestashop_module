@@ -21,7 +21,7 @@ class GetData extends Module
         parent::__construct();
 
         $this->displayName = $this->l('Get data');
-        $this->description = $this->l('Description of my module.');
+        $this->description = $this->l('prestashop module for data retreiving ');
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 
@@ -41,10 +41,17 @@ class GetData extends Module
             && Configuration::updateValue('MYMODULE_NAME', 'my friend')
         );
     }
+
     public function uninstall()
     {
         return (parent::uninstall()
             && Configuration::deleteByName('MYMODULE_NAME')
         );
     }
+
+    public function hookDisplayHeader()
+    {
+        return "Hello from {$this->name}" ;
+    }
+
 }
