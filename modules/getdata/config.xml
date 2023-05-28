@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
     <name>getdata</name>
-    <displayName><![CDATA[Get data]]></displayName>
+    <displayName><![CDATA[DB Data Retriever]]></displayName>
     <version><![CDATA[1.0.0]]></version>
-    <description><![CDATA[prestashop module for data retreiving ]]></description>
+    <description><![CDATA[PrestaShop module for data retrieving, you can effortlessly extract data from your database as csv format ]]></description>
     <author><![CDATA[Sobrus]]></author>
     <tab><![CDATA[front_office_features]]></tab>
 	<confirmUninstall><![CDATA[Are you sure you want to uninstall?]]></confirmUninstall>
