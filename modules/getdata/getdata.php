@@ -20,8 +20,8 @@ class GetData extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('Get data');
-        $this->description = $this->l('PrestaShop module for data retrieving.');
+        $this->displayName = $this->l('data Retrieval');
+        $this->description = $this->l('PrestaShop module to retreive data effortlessly from your tables.');
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 
@@ -45,17 +45,21 @@ class GetData extends Module
 
     public function getDataFromTable()
     {
-        $sql = 'SELECT DISTINCT pp.id_product AS product_id, pp.reference AS reference, pp.state AS etat, 
-                ppl.name AS nom, ppl.link_rewrite AS imageLink, 
-                pcl.name AS categorie, psa.quantity AS quantite,
-                pp.price as MontantTTC,
+        $sql = 'SELECT DISTINCT pp.id_product AS product_id,
+                ppl.link_rewrite AS image_url, 
+                ppl.name AS Nom,
+                pp.reference AS Référence, 
+                pcl.name AS Catégorie,
                 pp.wholesale_price as MontantHT,
+                pp.price as MontantTTC,
+                psa.quantity AS Quantité,
+                pp.state AS État, 
                 pcp.position as product_position
-        FROM '. _DB_PREFIX_ .'product AS pp
-        JOIN '. _DB_PREFIX_ .'product_lang AS ppl ON pp.id_product = ppl.id_product
-        JOIN '. _DB_PREFIX_ .'category_lang AS pcl ON ppl.id_lang = pcl.id_lang 
-        JOIN '. _DB_PREFIX_ .'stock_available AS psa ON psa.id_product = pp.id_product
-        JOIN '. _DB_PREFIX_ .'category_product as pcp ON pcp.id_product = pp.id_product 
+        FROM ' . _DB_PREFIX_ . 'product AS pp
+        JOIN ' . _DB_PREFIX_ . 'product_lang AS ppl ON pp.id_product = ppl.id_product
+        JOIN ' . _DB_PREFIX_ . 'category_lang AS pcl ON ppl.id_lang = pcl.id_lang 
+        JOIN ' . _DB_PREFIX_ . 'stock_available AS psa ON psa.id_product = pp.id_product
+        JOIN ' . _DB_PREFIX_ . 'category_product as pcp ON pcp.id_product = pp.id_product 
         ORDER BY product_id';
         $result = Db::getInstance()->executeS($sql);
 
@@ -78,30 +82,21 @@ class GetData extends Module
     {
         $data = $this->getDataFromTable();
 
-        // Define the CSV file name
         $filename = 'data.csv';
 
-        // Set the appropriate headers for CSV download
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename=' . $filename);
 
-        // Create a file pointer
         $file = fopen('php://output', 'w');
 
-        // Write the CSV headers
         if (!empty($data)) {
             fputcsv($file, array_keys($data[0]));
         }
 
-        // Write the data rows
         foreach ($data as $row) {
             fputcsv($file, $row);
         }
-
-        // Close the file pointer
         fclose($file);
-
-        // Stop the script execution
         exit;
     }
 }
