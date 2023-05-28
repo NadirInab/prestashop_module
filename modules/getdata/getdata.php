@@ -13,8 +13,8 @@ class GetData extends Module
         $this->author = 'Sobrus';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
-            'min' => '1.7.0.0',
-            'max' => '8.99.99',
+            'min' => '1.6.0.0',
+            'max' => '1.7.99.99'
         ];
         $this->bootstrap = true;
 
@@ -36,6 +36,12 @@ class GetData extends Module
             Shop::setContext(Shop::CONTEXT_ALL);
         }
 
+        // if (_PSVERSION >= '1.7') {
+        //     $this->registerHook('displayProductAdditionalInfo');
+        // } else {
+        //     $this->registerHook('productTab');
+        // }
+
         return (parent::install()
             && $this->registerHook('displayLeftColumn')
             && $this->registerHook('displayHeader')
@@ -43,10 +49,19 @@ class GetData extends Module
         );
     }
 
-    public function getDataFromTable()
+    public function uninstall()
     {
-        $sql = 'SELECT DISTINCT pp.id_product AS product_id,
-                ppl.link_rewrite AS image_url, 
+        return (parent::uninstall()
+            && Configuration::deleteByName('MYMODULE_NAME')
+        );
+    }
+
+    public function getDataFromTable()
+    { 
+        $_SERVER['HTTPS'] = 'off';
+        $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http" ;
+        $query = "SELECT DISTINCT pp.id_product AS product_id,
+                CONCAT('{$protocol}://{$_SERVER['SERVER_NAME']}','/',pp.id_product,'-',pcl.name, '/',ppl.link_rewrite,'.webp') AS image_url,
                 ppl.name AS Nom,
                 pp.reference AS Référence, 
                 pcl.name AS Catégorie,
@@ -55,22 +70,14 @@ class GetData extends Module
                 psa.quantity AS Quantité,
                 pp.state AS État, 
                 pcp.position as product_position
-        FROM ' . _DB_PREFIX_ . 'product AS pp
-        JOIN ' . _DB_PREFIX_ . 'product_lang AS ppl ON pp.id_product = ppl.id_product
-        JOIN ' . _DB_PREFIX_ . 'category_lang AS pcl ON ppl.id_lang = pcl.id_lang 
-        JOIN ' . _DB_PREFIX_ . 'stock_available AS psa ON psa.id_product = pp.id_product
-        JOIN ' . _DB_PREFIX_ . 'category_product as pcp ON pcp.id_product = pp.id_product 
-        ORDER BY product_id';
-        $result = Db::getInstance()->executeS($sql);
-
+        FROM " . _DB_PREFIX_ . "product AS pp
+        JOIN " . _DB_PREFIX_ . "product_lang AS ppl ON pp.id_product = ppl.id_product
+        JOIN " . _DB_PREFIX_ . "category_lang AS pcl ON ppl.id_lang = pcl.id_lang 
+        JOIN " . _DB_PREFIX_ . "stock_available AS psa ON psa.id_product = pp.id_product
+        JOIN " . _DB_PREFIX_ . "category_product as pcp ON pcp.id_product = pp.id_product 
+        ORDER BY product_id";
+        $result = Db::getInstance()->executeS($query);
         return $result;
-    }
-
-    public function uninstall()
-    {
-        return (parent::uninstall()
-            && Configuration::deleteByName('MYMODULE_NAME')
-        );
     }
 
     public function hookDisplayHeader()
