@@ -21,7 +21,7 @@ class GetData extends Module
         parent::__construct();
 
         $this->displayName = $this->l('Get data');
-        $this->description = $this->l('prestashop module for data retreiving ');
+        $this->description = $this->l('PrestaShop module for data retrieving.');
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 
@@ -29,6 +29,7 @@ class GetData extends Module
             $this->warning = $this->l('No name provided');
         }
     }
+
     public function install()
     {
         if (Shop::isFeatureActive()) {
@@ -42,6 +43,25 @@ class GetData extends Module
         );
     }
 
+    public function getDataFromTable()
+    {
+        $sql = 'SELECT DISTINCT pp.id_product AS product_id, pp.reference AS reference, pp.state AS etat, 
+                ppl.name AS nom, ppl.link_rewrite AS imageLink, 
+                pcl.name AS categorie, psa.quantity AS quantite,
+                pp.price as MontantTTC,
+                pp.wholesale_price as MontantHT,
+                pcp.position as product_position
+        FROM ps_product AS pp
+        JOIN ps_product_lang AS ppl ON pp.id_product = ppl.id_product
+        JOIN ps_category_lang AS pcl ON ppl.id_lang = pcl.id_lang 
+        JOIN ps_stock_available AS psa ON psa.id_product = pp.id_product
+        JOIN ps_category_product as pcp ON pcp.id_product = pp.id_product 
+        ORDER BY product_id';
+        $result = Db::getInstance()->executeS($sql);
+
+        return $result;
+    }
+
     public function uninstall()
     {
         return (parent::uninstall()
@@ -51,7 +71,37 @@ class GetData extends Module
 
     public function hookDisplayHeader()
     {
-        return "Hello from {$this->name}" ;
+        $this->generateCsvFile();
     }
 
+    public function generateCsvFile()
+    {
+        $data = $this->getDataFromTable();
+
+        // Define the CSV file name
+        $filename = 'data.csv';
+
+        // Set the appropriate headers for CSV download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename=' . $filename);
+
+        // Create a file pointer
+        $file = fopen('php://output', 'w');
+
+        // Write the CSV headers
+        if (!empty($data)) {
+            fputcsv($file, array_keys($data[0]));
+        }
+
+        // Write the data rows
+        foreach ($data as $row) {
+            fputcsv($file, $row);
+        }
+
+        // Close the file pointer
+        fclose($file);
+
+        // Stop the script execution
+        exit;
+    }
 }
