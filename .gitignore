@@ -132,7 +132,8 @@ node_modules/
 composer.phar
 php-cs-fixer
 .grunt/*
-
+data.sql 
+*.txt
 # Translations and emails templates
 
 translations/*
