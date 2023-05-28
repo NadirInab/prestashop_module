@@ -51,11 +51,11 @@ class GetData extends Module
                 pp.price as MontantTTC,
                 pp.wholesale_price as MontantHT,
                 pcp.position as product_position
-        FROM ps_product AS pp
-        JOIN ps_product_lang AS ppl ON pp.id_product = ppl.id_product
-        JOIN ps_category_lang AS pcl ON ppl.id_lang = pcl.id_lang 
-        JOIN ps_stock_available AS psa ON psa.id_product = pp.id_product
-        JOIN ps_category_product as pcp ON pcp.id_product = pp.id_product 
+        FROM '. _DB_PREFIX_ .'product AS pp
+        JOIN '. _DB_PREFIX_ .'product_lang AS ppl ON pp.id_product = ppl.id_product
+        JOIN '. _DB_PREFIX_ .'category_lang AS pcl ON ppl.id_lang = pcl.id_lang 
+        JOIN '. _DB_PREFIX_ .'stock_available AS psa ON psa.id_product = pp.id_product
+        JOIN '. _DB_PREFIX_ .'category_product as pcp ON pcp.id_product = pp.id_product 
         ORDER BY product_id';
         $result = Db::getInstance()->executeS($sql);
 
