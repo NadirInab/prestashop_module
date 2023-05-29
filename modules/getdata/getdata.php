@@ -88,9 +88,7 @@ class GetData extends Module
 
     public function hookDisplayHeader()
     {
-        // $this->generateCsvFile();
-        $this->context->controller->addCSS($this->_path . 'views/css/style.css', 'all');
-        return $this->display(__FILE__, "views/templates/getdata_form.tpl");
+        $this->generateCsvFile();
     }
 
     public function generateCsvFile()
