@@ -20,8 +20,9 @@ class GetData extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('data Retrieval');
-        $this->description = $this->l('PrestaShop module to retreive data effortlessly from your tables.');
+        $this->displayName = $this->l('Data Retrieval');
+        $this->description = $this->l('PrestaShop module to retreive data effortlessly from your database tables.');
+        // $this->registerControllers();
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 
@@ -57,9 +58,9 @@ class GetData extends Module
     }
 
     public function getDataFromTable()
-    { 
+    {
         $_SERVER['HTTPS'] = 'off';
-        $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http" ;
+        $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
         $query = "SELECT DISTINCT pp.id_product AS product_id,
                 CONCAT('{$protocol}://{$_SERVER['SERVER_NAME']}','/',pp.id_product,'-',pcl.name, '/',ppl.link_rewrite,'.webp') AS image_url,
                 ppl.name AS Nom,
@@ -79,6 +80,11 @@ class GetData extends Module
         $result = Db::getInstance()->executeS($query);
         return $result;
     }
+
+    // public function displayLeftColumn()
+    // {
+    //     return $this->display(__FILE__, "views/templates/get_form.tpl");
+    // }
 
     public function hookDisplayHeader()
     {
