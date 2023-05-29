@@ -5,6 +5,7 @@ if (!defined('_PS_VERSION_')) {
 
 class GetData extends Module
 {
+    // contructor function, where the module data is instatiated such as : name, version ...
     public function __construct()
     {
         $this->name = 'getdata';
@@ -31,6 +32,7 @@ class GetData extends Module
         }
     }
 
+    //  the install method 
     public function install()
     {
         if (Shop::isFeatureActive()) {
@@ -50,6 +52,7 @@ class GetData extends Module
         );
     }
 
+    // the uninstall method 
     public function uninstall()
     {
         return (parent::uninstall()
@@ -57,6 +60,7 @@ class GetData extends Module
         );
     }
 
+    // Retrieve data from database table, return an array of products data .
     public function getDataFromTable()
     {
         $_SERVER['HTTPS'] = 'off';
@@ -86,11 +90,14 @@ class GetData extends Module
     //     return $this->display(__FILE__, "views/templates/get_form.tpl");
     // }
 
+
+    // Hook to display data in the header
     public function hookDisplayHeader()
     {
         $this->generateCsvFile();
     }
 
+    // Generate CSV file and initiate download
     public function generateCsvFile()
     {
         $data = $this->getDataFromTable();
