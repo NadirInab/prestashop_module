@@ -21,7 +21,7 @@ class GetData extends Module
         parent::__construct();
 
         $this->displayName = $this->l('Data Retrieval');
-        $this->description = $this->l('PrestaShop module to retreive data effortlessly from your tables.');
+        $this->description = $this->l('PrestaShop module to retreive data effortlessly from your database tables.');
         // $this->registerControllers();
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
@@ -49,38 +49,6 @@ class GetData extends Module
             && Configuration::updateValue('MYMODULE_NAME', 'my friend')
         );
     }
-
-    // private function registerControllers()
-    // {
-    //     $controllers = array(
-    //         'Form' => array(
-    //             'className' => 'FormController',
-    //             'parentClassName' => 'ModuleFrontController',
-    //             'module' => $this->name,
-    //         ),
-    //     );
-
-    //     foreach ($controllers as $controller) {
-    //         $this->registerController($controller['className'], $controller['parentClassName'], $controller['module']);
-    //     }
-    // }
-
-    // private function registerController($controller, $parentClassName, $module)
-    // {
-    //     $file = $this->getLocalPath() . 'controllers/front/' . $controller . '.php';
-
-    //     if (file_exists($file)) {
-    //         require_once($file);
-
-    //         $controllerInstance = new $controller();
-    //         $controllerInstance->run($this->context);
-
-    //         $this->registerHook('moduleRoutes', function ($params) use ($controller, $parentClassName, $module) {
-    //             $params['module']->registerFrontController($controller, $parentClassName, $module);
-    //         });
-    //     }
-    // }
-
 
     public function uninstall()
     {
@@ -120,8 +88,7 @@ class GetData extends Module
 
     public function hookDisplayHeader()
     {
-        // $this->generateCsvFile();
-        return $this->display(__FILE__, "views/templates/getdata_form.tpl") ;
+        $this->generateCsvFile();
     }
 
     public function generateCsvFile()
