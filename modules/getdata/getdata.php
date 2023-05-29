@@ -20,8 +20,9 @@ class GetData extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('data Retrieval');
+        $this->displayName = $this->l('Data Retrieval');
         $this->description = $this->l('PrestaShop module to retreive data effortlessly from your tables.');
+        // $this->registerControllers();
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 
@@ -49,6 +50,38 @@ class GetData extends Module
         );
     }
 
+    // private function registerControllers()
+    // {
+    //     $controllers = array(
+    //         'Form' => array(
+    //             'className' => 'FormController',
+    //             'parentClassName' => 'ModuleFrontController',
+    //             'module' => $this->name,
+    //         ),
+    //     );
+
+    //     foreach ($controllers as $controller) {
+    //         $this->registerController($controller['className'], $controller['parentClassName'], $controller['module']);
+    //     }
+    // }
+
+    // private function registerController($controller, $parentClassName, $module)
+    // {
+    //     $file = $this->getLocalPath() . 'controllers/front/' . $controller . '.php';
+
+    //     if (file_exists($file)) {
+    //         require_once($file);
+
+    //         $controllerInstance = new $controller();
+    //         $controllerInstance->run($this->context);
+
+    //         $this->registerHook('moduleRoutes', function ($params) use ($controller, $parentClassName, $module) {
+    //             $params['module']->registerFrontController($controller, $parentClassName, $module);
+    //         });
+    //     }
+    // }
+
+
     public function uninstall()
     {
         return (parent::uninstall()
@@ -57,9 +90,9 @@ class GetData extends Module
     }
 
     public function getDataFromTable()
-    { 
+    {
         $_SERVER['HTTPS'] = 'off';
-        $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http" ;
+        $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
         $query = "SELECT DISTINCT pp.id_product AS product_id,
                 CONCAT('{$protocol}://{$_SERVER['SERVER_NAME']}','/',pp.id_product,'-',pcl.name, '/',ppl.link_rewrite,'.webp') AS image_url,
                 ppl.name AS Nom,
@@ -80,9 +113,15 @@ class GetData extends Module
         return $result;
     }
 
+    // public function displayLeftColumn()
+    // {
+    //     return $this->display(__FILE__, "views/templates/get_form.tpl");
+    // }
+
     public function hookDisplayHeader()
     {
-        $this->generateCsvFile();
+        // $this->generateCsvFile();
+        return $this->display(__FILE__, "views/templates/getdata_form.tpl") ;
     }
 
     public function generateCsvFile()
