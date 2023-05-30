@@ -9,7 +9,7 @@ class GetData extends Module
     public function __construct()
     {
         $this->name = 'getdata';
-        $this->tab = 'front_office_features';
+        $this->tab = 'administration';
         $this->version = '1.0.0';
         $this->author = 'Sobrus';
         $this->need_instance = 0;
@@ -17,7 +17,14 @@ class GetData extends Module
             'min' => '1.6.0.0',
             'max' => '1.7.99.99'
         ];
+        $this->tabs = [
+            'name' => 'GetData',
+            'visible' => true,
+            'class_name' => 'AdminOriginController',
+            'parent_class_name' => 'AdminCatalog'
+        ];
         $this->bootstrap = true;
+
 
         parent::__construct();
 
