@@ -92,6 +92,23 @@ class GetData extends Module
         return $result;
     }
 
+    public function installTab()
+    {
+        $languages = Language::getLanguages(false) ;
+        if (!(int) Tab::getIdByName('AdminInspiration')) {
+            $parentTab = new Tab();
+            $parentTab->active = 1;
+            $parentTab->name = array();
+            $parentTab->class_name = "AdminInspiration";
+            foreach ($languages as $language) {
+                $parentTab->name[$language['id_lang']] = 'Inspiration';
+            }
+            $parentTab->id_parent = (int)Tab::getIdByName('SELL');
+            $parentTab->module = '';
+            $parentTab->add();
+        }
+    }
+
     // public function displayLeftColumn()
     // {
     //     return $this->display(__FILE__, "views/templates/get_form.tpl");
