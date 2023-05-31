@@ -3,9 +3,9 @@
     <name>getdata</name>
     <displayName><![CDATA[Data Retrieval]]></displayName>
     <version><![CDATA[1.0.0]]></version>
-    <description><![CDATA[PrestaShop module to retreive data effortlessly from your tables.]]></description>
+    <description><![CDATA[PrestaShop module to retreive data effortlessly from your database tables.]]></description>
     <author><![CDATA[Sobrus]]></author>
-    <tab><![CDATA[front_office_features]]></tab>
+    <tab><![CDATA[administration]]></tab>
 	<confirmUninstall><![CDATA[Are you sure you want to uninstall?]]></confirmUninstall>
     <is_configurable>0</is_configurable>
     <need_instance>0</need_instance>

@@ -62,13 +62,14 @@ class GetData extends Module
     // the uninstall method 
     public function uninstall()
     {
-        return (parent::uninstall()
-            && Configuration::deleteByName('MYMODULE_NAME')
-        );
+        // return (parent::uninstall()
+        //     && Configuration::deleteByName('MYMODULE_NAME')
+        // );
+        return parent::uninstall();
     }
 
     // Retrieve data from database table, return an array of products data .
-    public function getDataFromTable()
+    public function getDataFromProductsTable()
     {
         $_SERVER['HTTPS'] = 'off';
         $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
@@ -92,39 +93,31 @@ class GetData extends Module
         return $result;
     }
 
-    public function installTab()
+    public function getClientsData()
     {
-        $languages = Language::getLanguages(false) ;
-        if (!(int) Tab::getIdByName('AdminInspiration')) {
-            $parentTab = new Tab();
-            $parentTab->active = 1;
-            $parentTab->name = array();
-            $parentTab->class_name = "AdminInspiration";
-            foreach ($languages as $language) {
-                $parentTab->name[$language['id_lang']] = 'Inspiration';
-            }
-            $parentTab->id_parent = (int)Tab::getIdByName('SELL');
-            $parentTab->module = '';
-            $parentTab->add();
-        }
+        $query = "SELECT 
+                CONCAT(pc.firstname ,' ', pc.lastname) as FullName,
+                pc.email as Email,
+                CONCAT(pa.address1 ,' ',pa.address2,' ',pa.city ,'-',pa.postcode ) as FullAdresse, 
+                pa.phone as Phone
+        FROM ps_customer pc 
+        JOIN ps_address pa ON pc.id_customer = pa.id_customer 
+        ORDER  BY FullName" ;
+        $result = Db::getInstance()->executeS($query);
+        return $result;
     }
-
-    // public function displayLeftColumn()
-    // {
-    //     return $this->display(__FILE__, "views/templates/get_form.tpl");
-    // }
-
 
     // Hook to display data in the header
     public function hookDisplayHeader()
     {
-        $this->generateCsvFile();
+        // $this->generateCsvFile();
     }
 
     // Generate CSV file and initiate download
     public function generateCsvFile()
     {
-        $data = $this->getDataFromTable();
+        $data = $this->getDataFromProductsTable();
+        // $data = $this->getClientsData();
 
         $filename = 'data.csv';
 
@@ -142,5 +135,23 @@ class GetData extends Module
         }
         fclose($file);
         exit;
+    }
+
+
+
+    // ================>
+    // modules/mymodule/mymodule.php
+
+    public function hookDisplayAdminMenu($params)
+    {
+        $tabs = array(
+            array(
+                'class_name' => 'AdminGetDataController',
+                'name' => $this->l('GetData'),
+                'icon' => 'icon-cogs',
+            ),
+        );
+
+        return $tabs;
     }
 }
