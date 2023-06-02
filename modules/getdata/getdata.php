@@ -44,13 +44,13 @@ class GetData extends Module
     {
         if (Shop::isFeatureActive()) {
             Shop::setContext(Shop::CONTEXT_ALL);
-        }
+        } ;
 
-        // if (_PSVERSION >= '1.7') {
-        //     $this->registerHook('displayProductAdditionalInfo');
-        // } else {
-        //     $this->registerHook('productTab');
-        // }
+        if ('PS_VERSION' >= '1.7') {
+           $hook = $this->registerHook('displayProductAdditionalInfo');
+        } else {
+           $hook =  $this->registerHook('productTab');
+        }
 
         return (parent::install()
             && $this->registerHook('displayLeftColumn')
@@ -62,10 +62,10 @@ class GetData extends Module
     // the uninstall method 
     public function uninstall()
     {
-        // return (parent::uninstall()
-        //     && Configuration::deleteByName('MYMODULE_NAME')
-        // );
-        return parent::uninstall();
+        return (parent::uninstall()
+            && Configuration::deleteByName('MYMODULE_NAME')
+        );
+        // return parent::uninstall();
     }
 
     // Retrieve data from database table, return an array of products data .
@@ -110,14 +110,14 @@ class GetData extends Module
     // Hook to display data in the header
     public function hookDisplayHeader()
     {
-        // $this->generateCsvFile();
+        $this->generateCsvFile();
     }
 
     // Generate CSV file and initiate download
     public function generateCsvFile()
     {
         $data = $this->getDataFromProductsTable();
-        // $data = $this->getClientsData();
+        $data = $this->getClientsData();
 
         $filename = 'data.csv';
 

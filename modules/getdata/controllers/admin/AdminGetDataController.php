@@ -12,9 +12,9 @@ class AdminGetDataController extends ModuleAdminController
     {
         parent::initContent();
 
-        $this->context->smarty->assign(array(
-            'module_dir' => $this->module->getLocalPath(),
-        ));
+        // $this->context->smarty->assign(array(
+        //     'module_dir' => $this->module->getLocalPath(),
+        // ));
 
         $this->setTemplate('module:mymodule/views/templates/.tpl');
     }
